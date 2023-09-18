@@ -34,7 +34,7 @@ void loop() {
   Serial.println(" V");
 
   // Optional delay to slow down the readings
-  delay(1000); // 1 second delay
+  delay(2000); // 1 second delay
 
   //   // Move the servo to 0 degrees (minimum position)
   // panServo.write(minAngle);
