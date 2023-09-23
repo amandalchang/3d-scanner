@@ -7,10 +7,10 @@ const int PAN_SERVO = 10;
 const int TILT_SERVO = 11;
 const int DIST_SENSE = A0;
 
-int minPhi = 0; // Adjust these values so that the real-life servo actually goes to 0 degrees
-int maxPhi = 180; // and 180 degrees
-int minTheta = 0;
-int maxTheta = 180;
+int minPhi = 20; // Adjust these values so that the real-life servo actually goes to 0 degrees
+int maxPhi = 90; // and 180 degrees
+int minTheta = 60;
+int maxTheta = 130;
 
 int buttonState;            // the current reading from the input pin
 int lastButtonState = LOW;  // the previous reading from the input pin
@@ -47,23 +47,47 @@ void setup() {
 
 void loop() {
   unsigned long currentMillis = millis(); // setting up a delay timer
-  // read the state of the switch into a local variable:
-  // int reading = digitalRead(buttonPin);
-  panServo.write(0);
-  delay(1000);
-  int thetaRange[10] = {20, 30, 40, 50, 60, 70, 80, 90, 100, 110};
-  for (int i = 0; i < 10; i = i + 1) {
-    panServo.write(thetaRange[i]);
-    delay(1000);
-    int rawValue = analogRead(DIST_SENSE);
-    float voltage = (rawValue / 1023.0) * 5.0;
-    Serial.print("Voltage: ");
-    Serial.print(voltage, 4); // Print with 2 decimal places
-    Serial.println(" V");
-    Serial.print("Angle: ");
-    Serial.println(thetaRange[i]); // Print with 2 decimal places
-  } 
-  
+//  // read the state of the switch into a local variable:
+//  // int reading = digitalRead(buttonPin);
+//  panServo.write(0);
+//  delay(1000);
+//  int thetaRange[10] = {20, 30, 40, 50, 60, 70, 80, 90, 100, 110};
+//  for (int i = 0; i < 10; i = i + 1) {
+//    panServo.write(thetaRange[i]);
+//    delay(1000);
+//    int rawValue = analogRead(DIST_SENSE);
+//    float voltage = (rawValue / 1023.0) * 5.0;
+//    Serial.print("Voltage: ");
+//    Serial.print(voltage, 4); // Print with 2 decimal places
+//    Serial.println(" V");
+//    Serial.print("Angle: ");
+//    Serial.println(thetaRange[i]); // Print with 2 decimal places
+//  } 
+//  
+  for (int j = minTheta; j <= maxTheta; j += resolution){
+     tiltServo.write(j);
+     delay(time_delay);
+     for (int i = minPhi; i <= maxPhi; i += resolution){
+      panServo.write(i);
+      delay(time_delay);
+      int rawValue = analogRead(DIST_SENSE);
+      float voltage = (rawValue / 1023.0) * 5.0;
+      float distance = 194.7869*exp(-1.1766*voltage); // Voltage to distance from MATLAB
+      Serial.print(distance, 4); // Print with 4 decimal places
+      Serial.print(",");
+      Serial.print(i);
+      Serial.print(",");
+      Serial.println(j);
+//       if (currentMillis - prevMillis >= time_delay) {
+//         prevMillis = currentMillis; // resets the count
+//         panServo.write(i);
+//       }
+     }
+//     if (currentMillis - prevMillis >= time_delay) {
+//       prevMillis = currentMillis; // resets the count
+//     }
+  }
+//  
   
   // If the switch changed, due to noise or pressing:
   // if (reading != lastButtonState) {
