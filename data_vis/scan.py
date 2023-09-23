@@ -6,7 +6,7 @@ import serial
 # program.
 with serial.Serial() as scanner:
     # Initialize the scanner with the specifics
-    scanner.port = "COM10"  # Replace with actual port
+    scanner.port = "/dev/tty.usbmodem1101"  # Replace with actual port
     scanner.baudrate = (
         9600  # This must match whatever baudrate the Arduino has.
     )
@@ -26,7 +26,8 @@ with serial.Serial() as scanner:
 
             # Assuming that the data from Arduino will look something like
             # "r,tilt,pan" -- we can split by comma and map as floats.
-            r, tilt, pan = map(float, data.split(","))
+            # r, tilt, pan = map(float, data.split(","))
+            print(data)
 
             # TODO Update the plot with the new data
             # TODO Save the data into a local file (maybe a .csv file)
