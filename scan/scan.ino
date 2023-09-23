@@ -39,7 +39,7 @@ void setup() {
   pinMode(DIST_SENSE, INPUT);
 
   // servo initial conditions
-  homeAngles = (panServo.read(), tiltServo.read());
+  int homeAngles[2] = {panServo.read(), tiltServo.read()};
 
   // initialize serial
   Serial.begin(baudRate);     // NOTE2: Set the baudRate to 115200 for faster communication
@@ -63,7 +63,17 @@ void loop() {
       buttonState = reading;
 
       if (buttonState == HIGH) {
-        runScan();
+          for (int j = minPhi; j <= maxPhi; j += resolution){
+            for (int i = minTheta; i <= maxTheta; i += resolution){
+              if (currentMillis - prevMillis >= time_delay) {
+                prevMillis = currentMillis; // resets the count
+                panServo.write(i);
+              }
+            if (currentMillis - prevMillis >= time_delay) {
+              prevMillis = currentMillis; // resets the count
+              tiltServo.write(j);
+      
+    }
       }
     }
   }
@@ -82,22 +92,4 @@ void loop() {
     Serial.print(voltage, 4); // Print with 2 decimal places
     Serial.println(" V");
   }
-}
-
-void runScan() {
-  for (int i = minTheta; i <= maxTheta; i += resolution){
-      if (currentMillis - prevMillis >= time_delay) {
-        prevMillis = currentMillis; // resets the count
-        
-        panServo.write(i);
-      if (i = maxTheta) {
-        j -= resolution
-        tiltServo.write(j)
-      }
-    }
-    
-    for (int j = minPhi; j <= maxPhi; j += resolution){
-
-    }
-    }
 }
