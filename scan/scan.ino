@@ -46,10 +46,24 @@ void setup() {
 }
 
 void loop() {
-  // unsigned long currentMillis = millis(); // setting up a delay timer
+  unsigned long currentMillis = millis(); // setting up a delay timer
   // read the state of the switch into a local variable:
   // int reading = digitalRead(buttonPin);
-  analogWrite(PAN_SERVO, 20);
+  panServo.write(0);
+  delay(1000);
+  int thetaRange[10] = {20, 30, 40, 50, 60, 70, 80, 90, 100, 110};
+  for (int i = 0; i < 10; i = i + 1) {
+    panServo.write(thetaRange[i]);
+    delay(1000);
+    int rawValue = analogRead(DIST_SENSE);
+    float voltage = (rawValue / 1023.0) * 5.0;
+    Serial.print("Voltage: ");
+    Serial.print(voltage, 4); // Print with 2 decimal places
+    Serial.println(" V");
+    Serial.print("Angle: ");
+    Serial.println(thetaRange[i]); // Print with 2 decimal places
+  } 
+  
   
   // If the switch changed, due to noise or pressing:
   // if (reading != lastButtonState) {
@@ -85,7 +99,7 @@ void loop() {
   // Read the raw analog value from the distance sensor (0-1023)
   // int rawValue = analogRead(DIST_SENSE);
 
-  // // Convert the raw value to voltage (0-5V)
+  // // // Convert the raw value to voltage (0-5V)
   // float voltage = (rawValue / 1023.0) * 5.0;
 
   // // Print the voltage value to serial
