@@ -18,7 +18,7 @@ int lastButtonState = LOW;  // the previous reading from the input pin
 unsigned long lastDebounceTime = 0;  // the last time the output pin was toggled
 unsigned long debounceDelay = 25;    // the debounce time; increase if the output flickers
 unsigned long prevMillis = 0;
-unsigned long time_delay = 300; // number of milliseconds the sensor stops to measure
+unsigned long time_delay = 1000; // number of milliseconds the sensor stops to measure
 unsigned long serial_delay = 1000; // number of milliseconds between printing serial voltages
 int resolution = 10; // number of degrees the sensor moves each time
 
