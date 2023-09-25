@@ -1,6 +1,7 @@
 import numpy as np
 import plotly.graph_objects as go
 import matplotlib.pyplot as plt
+import csv
 
 from numpy import sin, cos, sqrt, arccos, arctan2
 
@@ -147,7 +148,22 @@ def test_plot():
     Tests the functionality of the conversions and plotting.
     """
     # Let's start with Cartesian coordinates to check if the conversions work.
-    x_data, y_data, z_data = gen_sample_data()
+    data = gen_sample_data()  # in form of [x_data], [y_data], [z_data]
+    # transpose to get the form of [x1, y1, z1]
+    data_transposed = np.array(data).transpose()
+    # Round the numbers to 3 decimal places
+    data_transposed = data_transposed.round(3)
+
+    # Save as a csv file for future access
+    with open("data.csv", "w", newline="") as file:
+        data_writer = csv.writer(file, delimiter=",")
+        data_writer.writerows(data_transposed)
+
+    # Opening the saved file again
+    data_transposed = np.loadtxt("data.csv", delimiter=",", dtype=float)
+    x_data, y_data, z_data = data_transposed.transpose()
+
+    # Initialize the spherical coordinate setup
     r = []
     theta = []
     phi = []
