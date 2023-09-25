@@ -1,3 +1,5 @@
+"""This module is for serial communication with the scanner."""
+from time import strftime, localtime
 import serial
 
 # Set up serial communication
@@ -19,6 +21,8 @@ with serial.Serial() as scanner:
 
     # Attempt to read data from serial connection
     try:
+        # Grab current time for file name
+        time_prefix = strftime("%a-%d-%b-%Y-%H-%M", localtime())
         # Continue to run as long as the scanner's connection is open
         while scanner.is_open:
             # Read and parse incoming data from the Arduino
@@ -29,8 +33,13 @@ with serial.Serial() as scanner:
             # r, tilt, pan = map(float, data.split(","))
             print(data)
 
-            # TODO Update the plot with the new data
-            # TODO Save the data into a local file (maybe a .csv file)
+            # Save the data into a local file (maybe a .csv file)
+
+            with open(
+                f"{time_prefix}.csv", "a", newline="\n", encoding=str
+            ) as f:
+                f.write(data)
 
     except KeyboardInterrupt:
         scanner.close()  # Close the serial port on Ctrl+C
+        # TODO Update the plot with the new data
