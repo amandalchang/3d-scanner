@@ -7,9 +7,7 @@ import serial
 with serial.Serial() as scanner:
     # Initialize the scanner with the specifics
     scanner.port = "/dev/tty.usbmodem1101"  # Replace with actual port
-    scanner.baudrate = (
-        9600  # This must match whatever baudrate the Arduino has.
-    )
+    scanner.baudrate = (9600)  # This must match whatever baudrate the Arduino has.
 
     # Attempt to open the serial connection
     try:
@@ -21,12 +19,12 @@ with serial.Serial() as scanner:
     try:
         # Continue to run as long as the scanner's connection is open
         while scanner.is_open:
-            # Read and parse incoming data from the Arduino
+             # Read and parse incoming data from the Arduino
             data = scanner.readline().decode().strip()
 
             # Assuming that the data from Arduino will look something like
             # "r,tilt,pan" -- we can split by comma and map as floats.
-            # r, tilt, pan = map(float, data.split(","))
+            # r, tilt, pan = map(float, data.split(",")) # supposed to be map(function,iterable)
             print(data)
 
             # TODO Update the plot with the new data
