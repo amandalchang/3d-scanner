@@ -1,6 +1,8 @@
 """This module is for serial communication with the scanner."""
 from time import strftime, localtime
+import numpy as np
 import serial
+import visualization
 
 # Set up serial communication
 
@@ -42,4 +44,11 @@ with serial.Serial() as scanner:
 
     except KeyboardInterrupt:
         scanner.close()  # Close the serial port on Ctrl+C
-        # TODO Update the plot with the new data
+
+        # Opening the saved file again
+        data_transposed = np.loadtxt(
+            f"{time_prefix}.csv", delimiter=",", dtype=float
+        )
+        x_data, y_data, z_data = data_transposed.transpose()
+        # Plot with collected data
+        visualization.scatter_3d_plotly(x_data, y_data, z_data)
