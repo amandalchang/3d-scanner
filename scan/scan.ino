@@ -7,18 +7,18 @@ const int PAN_SERVO = 10;
 const int TILT_SERVO = 11;
 const int DIST_SENSE = A0;
 
-int minPhi = 60;     //-45
+int minPhi = 60;     // 90 is when the scanner faces away from the ledge of the box
 int maxPhi = 120;
-int minTheta = 45;   // approx 47
-int maxTheta = 115;  // approx 113
+int minTheta = 45;  // 90 is when the sensor is parallel to the ground
+int maxTheta = 115;  
 
 int buttonState;            // the current reading from the input pin
 int lastButtonState = LOW;  // the previous reading from the input pin
 
 unsigned long lastDebounceTime = 0;  // the last time the output pin was toggled
 unsigned long debounceDelay = 25;    // the debounce time
-unsigned long time_delay = 50;     // number of milliseconds the sensor stops to measure
-int resolution = 1;                 // ~ 9 fake degrees corresponds to 10 real degrees, as determined by testing
+unsigned long time_delay = 300;     // number of ms the sensor stops to measure
+int resolution = 5;
 
 
 int baudRate = 9600;
@@ -60,16 +60,10 @@ void loop() {
 
       if (buttonState == LOW) {
         for (int i = minTheta; i <= maxTheta; i += resolution) {
-          Serial.print("Tilt servo set to: ");
-          Serial.println(i);
           tiltServo.write(i);
           delay(time_delay);
           for (int j = minPhi; j <= maxPhi; j += resolution) {
             panServo.write(j);
-            Serial.print("command sent to move to position:");
-            Serial.print(i);
-            Serial.print(",");
-            Serial.println(j);
             delay(time_delay);
 
             // Read the raw analog value from the dist sensor (0-1023)
@@ -77,14 +71,14 @@ void loop() {
 
             // Convert raw value to voltage (0-5V)
             float voltage = (rawValue / 1023.0) * 5.0;
-            float distance = 194.7869 * exp(-1.1766 * voltage);  // Voltage to distance from MATLAB
+            float distance = 194.7869 * exp(-1.1766 * voltage) - 5;  // Voltage to distance minus offset from MATLAB
 
             Serial.print(distance, 4);  // Print with 4 decimal places
             Serial.print(",");
-            
             Serial.print(i);
             Serial.print(",");
-            Serial.println(j);
+            Serial.print(j);
+            Serial.print("\n");
           }
         }
       }
