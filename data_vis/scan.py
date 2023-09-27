@@ -11,7 +11,7 @@ import visualization
 with serial.Serial() as scanner:
     # Initialize the scanner with the specifics
     scanner.port = "/dev/ttyACM0"  # Replace with actual port
-    scanner.baudrate = 9600  # This must match whatever baudrate the Arduino has.
+    scanner.baudrate = 9600  # This must match baudrate of Arduino.
 
     # Attempt to open the serial connection
     try:
@@ -29,13 +29,12 @@ with serial.Serial() as scanner:
             data = str(scanner.readline().decode().strip())
 
             # Assuming that the data from Arduino will look something like
-            # "r,tilt,pan" -- we can split by comma and map as floats.
-            # r, tilt, pan = map(float, data.split(","))
+            # "r,tilt,pan".
             print(data)
-
             # Save the data into a local file (maybe a .csv file)
-
-            with open(f"{time_prefix}.csv", "a", newline="\n", encoding="utf-8") as f:
+            with open(
+                f"{time_prefix}.csv", "a", newline="\n", encoding="utf-8"
+                ) as f:
                 f.write(data)
                 f.write("\n")
 
@@ -43,7 +42,9 @@ with serial.Serial() as scanner:
         scanner.close()  # Close the serial port on Ctrl+C
 
         # Opening the saved file again
-        data_transposed = np.loadtxt(f"{time_prefix}.csv", delimiter=",", dtype=float)
+        data_transposed = np.loadtxt(
+            f"{time_prefix}.csv", delimiter=",", dtype=float
+            )
         data_transposed *= np.pi / 180
         x_data, y_data, z_data = data_transposed.transpose()
 
