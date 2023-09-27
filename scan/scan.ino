@@ -78,7 +78,7 @@ void loop()
             // Convert raw value to voltage (0-5V)
             float voltage = (rawValue / 1023.0) * 5.0;
 
-            // Voltage to distance minus offset from sensor to tilt axis
+            // Voltage to distance plus offset from sensor to tilt axis
             float distance = 179.4398 * exp(-1.0767 * voltage) + 5;
 
             Serial.print(distance, 4); // Print with 4 decimal places
