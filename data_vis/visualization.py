@@ -182,11 +182,4 @@ def test_plot():
 
 # Run the test function
 # If you see a circle with a fixed x value, our test was successful.
-# test_plot()
-# Opening the saved file again
-data_transposed = np.loadtxt("data.csv", delimiter=",", dtype=float)
-data_transposed *= np.pi / 180
-x_data, y_data, z_data = data_transposed.transpose()
-
-# Plot with collected data
-scatter_3d_plotly(y_data, x_data, z_data)
+# test_plot() # Uncomment this line to test.
