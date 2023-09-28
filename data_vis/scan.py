@@ -34,7 +34,7 @@ with serial.Serial() as scanner:
             # Save the data into a local file (maybe a .csv file)
             with open(
                 f"{time_prefix}.csv", "a", newline="\n", encoding="utf-8"
-                ) as f:
+            ) as f:
                 f.write(data)
                 f.write("\n")
 
@@ -44,9 +44,9 @@ with serial.Serial() as scanner:
         # Opening the saved file again
         data_transposed = np.loadtxt(
             f"{time_prefix}.csv", delimiter=",", dtype=float
-            )
+        )
         data_transposed *= np.pi / 180
-        x_data, y_data, z_data = data_transposed.transpose()
+        r_data, theta_data, rho_data = data_transposed.transpose()
 
         # Plot with collected data
-        visualization.scatter_3d_plotly(-(x_data + 5), y_data, z_data)
+        visualization.scatter_3d_plotly(r_data, theta_data, rho_data)
